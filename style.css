@@ -107,83 +107,83 @@ footer {
   font-size: .95rem;
 }
 
-/* ==== Project 2 Page Styling ==== */
-.project2 {
+/* ==== GUESS THE NUMBER ==== */
+
+/* sets a dark background just for this page */
+.dark-bg {
+  background-color: #111; /* pure dark background */
+  color: #fff; /* makes text white */
+}
+
+/* centers the card perfectly in the middle of the screen */
+.project2-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 70vh;
+  height: 80vh; /* centers vertically */
 }
 
-.container {
-  background: var(--card);
-  border: 1px solid var(--stroke);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-  padding: 35px 25px;
+/* the actual game card */
+.game-card {
+  background-color: #1e1e1e; /* dark gray card */
+  padding: 40px;
+  border-radius: 12px; /* smooth corners */
   text-align: center;
-  max-width: 400px;
-  width: 100%;
+  width: 350px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5); /* soft glow */
 }
 
-.container h1 {
-  color: var(--header);
-  font-size: 1.6rem;
-  margin-bottom: 16px;
+/* title styling */
+.game-card h1 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
 }
 
-.container p {
-  margin-bottom: 10px;
+/* paragraph (instruction) styling */
+.game-card p {
+  color: #ccc; /* light gray text */
+  margin-bottom: 15px;
 }
 
+/* input box styling */
 input[type="number"] {
+  width: 80%;
   padding: 10px;
-  width: 75%;
-  border-radius: 8px;
-  border: 1px solid var(--stroke);
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-
-.buttons {
-  margin-top: 8px;
-}
-
-button {
-  padding: 8px 15px;
   border: none;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 600;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* buttons styling */
+button {
+  background-color: #00c896; /* bright green */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
-  transition: 0.3s;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
+/* glow effect when hovering over buttons */
 button:hover {
-  background: var(--accentHover);
-  box-shadow: 0 0 10px var(--accentHover);
+  background-color: #00a57d;
+  box-shadow: 0 0 10px #00c896;
 }
 
+/* result text */
 #resultText {
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 1.1rem;
-  color: var(--header);
+  color: #fff;
 }
 
+/* attempts text */
 #attemptsText {
-  color: var(--muted);
   margin-top: 5px;
-}
-
-.back-home {
-  color: var(--brand);
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: 0.3s;
-}
-
-.back-home:hover {
-  color: var(--accent);
+  color: #bbb;
 }
