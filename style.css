@@ -1,4 +1,4 @@
-/* color setup for the whole site */
+/* ============ GLOBAL THEME VARIABLES ============ */
 :root {
   --bg:#f8fafc;
   --text:#334155;
@@ -13,7 +13,7 @@
   --shadow:0 6px 20px rgba(15,23,42,.08);
 }
 
-/* resets */
+/* ============ BASE RESET ============ */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -23,17 +23,17 @@ body {
   line-height: 1.55;
 }
 
-/* shared links and layout */
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; height: auto; display: block; }
 
-/* header and nav bar */
+/* ============ HEADER / NAVBAR ============ */
 header {
   position: sticky;
   top: 0;
   background: var(--header);
   color: var(--headerText);
   z-index: 20;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
 
 .nav {
@@ -46,7 +46,12 @@ header {
   gap: 16px;
 }
 
-.brand { font-weight: 700; font-size: 1.05rem; color: var(--brand); }
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: .3px;
+  color: var(--brand);
+}
 
 .tabs { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -56,134 +61,225 @@ header {
   background: var(--accent);
   color: #fff;
   transition: .15s;
+  font-weight: 500;
 }
 .tab:hover { background: var(--accentHover); }
-
 .tab.active {
   background: var(--accentHover);
   font-weight: 700;
 }
 
-/* main resume card layout */
-.wrap { max-width: 1400px; margin: 22px auto; padding: 0 18px; }
+/* ============ MAIN LAYOUT ============ */
+.wrap {
+  max-width: 1400px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
 
 .resume {
   background: var(--card);
   border: 1px solid var(--stroke);
   border-radius: 14px;
   box-shadow: var(--shadow);
-  padding: 24px;
+  padding: 40px;
+  animation: fadeIn 0.8s ease-in;
 }
 
-.topArea { display: flex; gap: 20px; margin-bottom: 18px; }
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ PROFILE SECTION ============ */
+.topArea {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  margin-bottom: 25px;
+}
 
 .photo {
   width: 180px;
   border-radius: 14px;
-  border: 1px solid var(--stroke);
-  box-shadow: var(--shadow);
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
   object-fit: cover;
 }
 
-h1 { font-size: 2rem; line-height: 1.2; margin-bottom: 4px; }
+.intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-.contact { color: var(--muted); font-size: .98rem; }
+.name {
+  font-size: 2.3rem;
+  color: var(--header);
+  margin-bottom: 6px;
+}
 
-.section { margin: 22px 0; }
+.contact {
+  color: var(--muted);
+  font-size: .98rem;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-top: 6px;
+}
+
+/* ============ SECTION HEADERS ============ */
+.section { margin: 28px 0; }
 
 .section h2 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   margin-bottom: 10px;
   padding-left: 10px;
   border-left: 4px solid var(--accent);
 }
 
-/* footer */
+/* Divider between sections */
+.divider {
+  border: none;
+  border-top: 1px solid var(--stroke);
+  margin: 25px 0;
+  opacity: 0.7;
+}
+
+/* ============ ROLE / JOB INFO ============ */
+.role { margin: 16px 0; }
+.role strong { display: block; font-size: 1.05rem; color: var(--header); }
+.meta { color: var(--muted); font-size: .95rem; margin: 2px 0 8px; }
+
+ul { padding-left: 20px; }
+li { margin: 6px 0; line-height: 1.6; }
+
+/* ============ FOOTER ============ */
 footer {
   max-width: 1400px;
-  margin: 28px auto 44px;
+  margin: 35px auto 50px;
   padding: 0 18px;
   color: var(--muted);
   font-size: .95rem;
-}
-
-/* ==== GUESS THE NUMBER ==== */
-
-/* sets a dark background just for this page */
-.dark-bg {
-  background-color: #111; /* pure dark background */
-  color: #fff; /* makes text white */
-}
-
-/* centers the card perfectly in the middle of the screen */
-.project2-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh; /* centers vertically */
-}
-
-/* the actual game card */
-.game-card {
-  background-color: #1e1e1e; /* dark gray card */
-  padding: 40px;
-  border-radius: 12px; /* smooth corners */
-  text-align: center;
-  width: 350px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5); /* soft glow */
-}
-
-/* title styling */
-.game-card h1 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-}
-
-/* paragraph (instruction) styling */
-.game-card p {
-  color: #ccc; /* light gray text */
-  margin-bottom: 15px;
-}
-
-/* input box styling */
-input[type="number"] {
-  width: 80%;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  margin-bottom: 15px;
   text-align: center;
 }
 
-/* buttons styling */
-button {
-  background-color: #00c896; /* bright green */
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 15px;
-  margin: 5px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .topArea { flex-direction: column; align-items: center; text-align: center; }
+  .photo { margin-bottom: 12px; }
 }
 
-/* glow effect when hovering over buttons */
-button:hover {
-  background-color: #00a57d;
-  box-shadow: 0 0 10px #00c896;
-}
-
-/* result text */
-#resultText {
-  margin-top: 10px;
-  font-size: 1.1rem;
+/* ============ BUTTONS (if used anywhere else) ============ */
+.setup-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: var(--accent);
   color: #fff;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.setup-btn:hover { background: var(--accentHover); }
+
+/* ============ PROJECT 2 (Dark Mode Game) ============ */
+
+/* this makes the background dark just for the game page */
+.dark-bg {
+  background-color: #111; /* dark gray/black background */
+  color: #fff; /* makes all text white */
 }
 
-/* attempts text */
-#attemptsText {
-  margin-top: 5px;
-  color: #bbb;
+/* centers the game box perfectly in the middle of the screen */
+.project2-center {
+  display: flex; /* lets me center using flexbox */
+  justify-content: center; /* centers left & right */
+  align-items: center; /* centers up & down */
+  height: 80vh; /* takes up 80% of the screen height */
 }
+
+/* this is the main box that holds everything in the game */
+.game-card {
+  background-color: #1e1e1e; /* dark card background */
+  padding: 40px; /* space inside the card */
+  border-radius: 12px; /* smooth round corners */
+  text-align: center; /* centers all text and buttons */
+  width: 350px; /* keeps a nice compact size */
+  box-shadow: 0 0 20px rgba(0,0,0,0.5); /* soft glow shadow */
+  animation: fadeIn 0.8s ease-in; /* fade-in when the page loads */
+}
+
+/* the main title text for the game */
+.game-card h1 {
+  font-size: 1.8rem; /* big title size */
+  margin-bottom: 15px; /* space under the title */
+  color: #fff; /* white color for visibility */
+}
+
+/* small description under the title */
+.game-card p {
+  color: #ccc; /* lighter gray text */
+  margin-bottom: 15px; /* space between text and input */
+}
+
+/* input box where player types their guess */
+input[type="number"] {
+  width: 80%; /* not too wide, keeps balance */
+  padding: 10px; /* adds breathing room inside the input */
+  border: none; /* removes ugly default border */
+  border-radius: 6px; /* smooth edges */
+  font-size: 1rem; /* readable text */
+  margin-bottom: 15px; /* space under the input */
+  text-align: center; /* centers the number they type */
+  background-color: #fff; /* white background so it stands out on dark */
+}
+
+/* both buttons (Check Guess + Play Again) */
+button {
+  background-color: #00c896; /* bright green color */
+  color: white; /* white text on green */
+  border: none; /* clean look, no border */
+  border-radius: 6px; /* rounded edges */
+  padding: 10px 15px; /* button size */
+  margin: 5px; /* small space between buttons */
+  cursor: pointer; /* shows pointer hand on hover */
+  font-weight: 600; /* makes text bold */
+  transition: all 0.3s ease; /* smooth hover animation */
+}
+
+/* when hovering over the buttons */
+button:hover {
+  background-color: #00a57d; /* darker green on hover */
+  box-shadow: 0 0 10px #00c896; /* adds a glowing effect */
+}
+
+/* the result message (like Too High, Correct, etc.) */
+#resultText {
+  margin-top: 10px; /* space from buttons */
+  font-size: 1.1rem; /* slightly bigger text */
+  color: #fff; /* white text for clarity */
+}
+
+/* text showing how many attempts the player has done */
+#attemptsText {
+  margin-top: 5px; /* small gap above it */
+  color: #bbb; /* lighter gray so it’s not too bright */
+}
+
+/* the “Back to Home” link if it’s used */
+.back-home {
+  color: var(--brand); /* light text color */
+  text-decoration: none; /* removes underline */
+  font-size: 0.95rem; /* small and neat */
+  transition: 0.3s; /* smooth hover */
+}
+
+/* color change when hovering the back-home link */
+.back-home:hover {
+  color: var(--accent); /* turns green when hovered */
+}
+
