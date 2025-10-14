@@ -6,7 +6,7 @@
   <title>Project 2 – Guess The Number</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="dark-bg">
   <header>
     <nav class="nav">
       <div class="brand">Fahad Elia</div>
@@ -19,22 +19,20 @@
     </nav>
   </header>
 
-  <main class="wrap">
-    <section class="project2">
-      <div class="container">
-        <h1>🎯 Project 2: Guess The Number 🎯</h1>
-        <p>I'm thinking of a number between <strong>1 and 10</strong>...</p>
+  <main class="project2-center">
+    <div class="game-card">
+      <h1>🎯 Guess The Number 🎯</h1>
+      <p>I'm thinking of a number between <strong>1 and 10</strong>...</p>
 
-        <input type="number" id="userGuess" placeholder="Enter your guess">
-        <div class="buttons">
-          <button onclick="checkGuess()">Check Guess</button>
-          <button onclick="resetGame()">Play Again</button>
-        </div>
-
-        <p id="resultText"></p>
-        <p id="attemptsText"></p>
+      <input type="number" id="userGuess" placeholder="Enter your guess">
+      <div class="buttons">
+        <button onclick="checkGuess()">Check Guess</button>
+        <button onclick="resetGame()">Play Again</button>
       </div>
-    </section>
+
+      <p id="resultText"></p>
+      <p id="attemptsText"></p>
+    </div>
   </main>
 
   <footer>
