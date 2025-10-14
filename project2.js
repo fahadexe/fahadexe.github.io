@@ -5,7 +5,6 @@ let attempts = 0;
 // this makes a random number between 1 and 10
 function generateNumber() {
   secretNumber = Math.floor(Math.random() * 10) + 1; // random number from 1 to 10
-  console.log("Secret number:", secretNumber); // just showing the number in console for testing
 }
 
 // this checks what number the user guessed

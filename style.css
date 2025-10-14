@@ -1,4 +1,4 @@
-/* ============ GLOBAL THEME VARIABLES ============ */
+/*  GLOBAL THEME VARIABLES  */
 :root {
   --bg:#f8fafc;
   --text:#334155;
@@ -13,7 +13,7 @@
   --shadow:0 6px 20px rgba(15,23,42,.08);
 }
 
-/* ============ BASE RESET ============ */
+/*  BASE RESET  */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -26,7 +26,7 @@ body {
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; height: auto; display: block; }
 
-/* ============ HEADER / NAVBAR ============ */
+/*  HEADER / NAVBAR  */
 header {
   position: sticky;
   top: 0;
@@ -69,7 +69,7 @@ header {
   font-weight: 700;
 }
 
-/* ============ MAIN LAYOUT ============ */
+/*  MAIN LAYOUT  */
 .wrap {
   max-width: 1400px;
   margin: 30px auto;
@@ -91,7 +91,7 @@ header {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ============ PROFILE SECTION ============ */
+/*  PROFILE SECTION  */
 .topArea {
   display: flex;
   align-items: flex-start;
@@ -130,7 +130,7 @@ header {
   margin-top: 6px;
 }
 
-/* ============ SECTION HEADERS ============ */
+/*  SECTION HEADERS  */
 .section { margin: 28px 0; }
 
 .section h2 {
@@ -148,7 +148,7 @@ header {
   opacity: 0.7;
 }
 
-/* ============ ROLE / JOB INFO ============ */
+/*  ROLE / JOB INFO  */
 .role { margin: 16px 0; }
 .role strong { display: block; font-size: 1.05rem; color: var(--header); }
 .meta { color: var(--muted); font-size: .95rem; margin: 2px 0 8px; }
@@ -156,7 +156,7 @@ header {
 ul { padding-left: 20px; }
 li { margin: 6px 0; line-height: 1.6; }
 
-/* ============ FOOTER ============ */
+/*  FOOTER  */
 footer {
   max-width: 1400px;
   margin: 35px auto 50px;
@@ -166,13 +166,13 @@ footer {
   text-align: center;
 }
 
-/* ============ RESPONSIVE ============ */
+/*  RESPONSIVE  */
 @media (max-width: 900px) {
   .topArea { flex-direction: column; align-items: center; text-align: center; }
   .photo { margin-bottom: 12px; }
 }
 
-/* ============ BUTTONS (if used anywhere else) ============ */
+/*  BUTTONS (if used anywhere else)  */
 .setup-btn {
   display: inline-block;
   padding: 8px 14px;
@@ -186,7 +186,7 @@ footer {
 }
 .setup-btn:hover { background: var(--accentHover); }
 
-/* ============ PROJECT 2 (Dark Mode Game) ============ */
+/*  PROJECT 2  (I put comments everywhere on purpose for future editing once im done with the class i know exactly what i did)*/ 
 
 /* this makes the background dark just for the game page */
 .dark-bg {
