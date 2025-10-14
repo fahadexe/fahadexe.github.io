@@ -1,44 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html> <!-- this just tells the browser it’s an HTML5 page -->
+<html lang="en"> <!-- whole page is in English -->
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project 2 – Guess The Number</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"> <!-- makes sure letters, symbols, and emojis show up right -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- keeps layout good on phones -->
+  <title>Project 2 – Guess The Number</title> <!-- tab name in the browser -->
+  <link rel="stylesheet" href="style.css"> <!-- connects to my CSS file for design -->
 </head>
+
+<!-- dark mode background just for this page -->
 <body class="dark-bg">
   <header>
     <nav class="nav">
-      <div class="brand">Fahad Elia</div>
-      <div class="tabs">
-        <a class="tab" href="index.html">Home</a>
-        <a class="tab" href="interests.html">Interests</a>
-        <a class="tab" href="about.html">About Me</a>
-        <a class="tab active" href="project2.html">Project 2</a>
+      <div class="brand">Fahad Elia</div> <!-- my name / logo on the top left -->
+      <div class="tabs"> <!-- top menu bar with links to other pages -->
+        <a class="tab" href="index.html">Home</a> <!-- link to my resume page -->
+        <a class="tab" href="interests.html">Interests</a> <!-- link to my interests -->
+        <a class="tab" href="about.html">About Me</a> <!-- link to my about page -->
+        <a class="tab active" href="project2.html">Project 2</a> <!-- this page  -->
       </div>
     </nav>
   </header>
 
+  <!-- centers my guessing game box on the screen -->
   <main class="project2-center">
-    <div class="game-card">
-      <h1>🎯 Guess The Number 🎯</h1>
-      <p>I'm thinking of a number between <strong>1 and 10</strong>...</p>
+    <div class="game-card"> <!-- the box that holds the whole game -->
+      <h1>🎯 Guess The Number 🎯</h1> <!-- main title -->
+      <p>I'm thinking of a number between <strong>1 and 10</strong>...</p> <!-- short instruction -->
 
+      <!-- where the user types their number -->
       <input type="number" id="userGuess" placeholder="Enter your guess">
+
+      <!-- both buttons side by side -->
       <div class="buttons">
-        <button onclick="checkGuess()">Check Guess</button>
-        <button onclick="resetGame()">Play Again</button>
+        <button onclick="checkGuess()">Check Guess</button> <!-- checks the number -->
+        <button onclick="resetGame()">Play Again</button> <!-- restarts the game -->
       </div>
 
+      <!-- where the result message shows up -->
       <p id="resultText"></p>
+
+      <!-- where number of attempts shows up -->
       <p id="attemptsText"></p>
     </div>
   </main>
 
+  <!-- simple footer with my name -->
   <footer>
     © 2025 Fahad Elia. All rights reserved.
   </footer>
 
+  <!-- connects my JavaScript file that makes the game work -->
   <script src="project2.js"></script>
 </body>
 </html>
