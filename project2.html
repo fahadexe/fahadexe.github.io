@@ -1,26 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project 2 - Guess The Number</title>
-  <link rel="stylesheet" href="style.css">
-</head>
 <body>
   <header>
-    <h1>🎯 Project 2: Guess The Number 🎯</h1>
-    <a href="index.html" style="color:white; text-decoration:none;">⬅ Back to Home</a>
+    <nav class="nav">
+      <div class="brand">🎯 Project 2: Guess The Number 🎯</div>
+      <a href="index.html" class="back-home">← Back to Home</a>
+    </nav>
   </header>
 
-  <div class="container">
-    <p>I'm thinking of a number between <strong>1 and 10</strong>...</p>
-    <input type="number" id="userGuess" placeholder="Enter your guess">
-    <button onclick="checkGuess()">Check Guess</button>
-    <button onclick="resetGame()">Play Again</button>
-    <p id="resultText"></p>
-    <p id="attemptsText"></p>
-  </div>
+  <main class="wrap">
+    <section class="project2">
+      <div class="container">
+        <h1>Guess The Number</h1>
+        <p>I'm thinking of a number between <strong>1 and 10</strong>...</p>
+
+        <input type="number" id="userGuess" placeholder="Enter your guess">
+        <div class="buttons">
+          <button onclick="checkGuess()">Check Guess</button>
+          <button onclick="resetGame()">Play Again</button>
+        </div>
+
+        <p id="resultText"></p>
+        <p id="attemptsText"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Fahad Elia. All rights reserved.
+  </footer>
 
   <script src="project2.js"></script>
 </body>
-</html>
