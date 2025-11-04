@@ -20,7 +20,6 @@
     .grid{display:grid;grid-template-columns:1fr;gap:16px}
     @media(min-width:900px){.grid{grid-template-columns: 1fr 2fr}}
 
-    /* form */
     label{display:block;margin-bottom:6px;color:#cfd0e3;font-size:14px}
     input[type="date"]{background:#0b0b10;border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:12px;width:100%;outline:none}
     input[type="date"]:focus{border-color:var(--accent)}
@@ -36,7 +35,6 @@
 
     .feedback{color:#9ae6b4;font-size:14px;margin-top:6px;min-height:18px}
 
-    /* chart */
     .chart-wrap{height:280px}
     svg{width:100%;height:100%}
     .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
@@ -44,7 +42,6 @@
     .card .title{color:var(--muted);font-size:12px}
     .card .val{font-weight:700;font-size:20px}
 
-    /* table */
     table{width:100%;border-collapse:collapse}
     thead th{color:var(--muted);text-align:left;font-weight:600;border-bottom:1px solid var(--line);padding:10px}
     tbody td{border-bottom:1px solid #171722;padding:10px}
@@ -62,14 +59,12 @@
     </div>
 
     <div class="grid">
-      <!-- LEFT -->
       <div class="panel">
         <label for="date">Date</label>
         <input id="date" type="date" />
 
         <label style="margin-top:10px">How many hours did you sleep?</label>
         <div id="hourButtons" class="hours" role="radiogroup" aria-label="Hours slept">
-          <!-- buttons-->
         </div>
 
         <div class="actions">
@@ -79,7 +74,6 @@
         <div id="feedback" class="feedback"></div>
       </div>
 
-      <!-- RIGHT: chart + stats -->
       <div class="panel">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <div style="display:flex;align-items:center;gap:8px"><span>🌙</span><strong>Last 7 days</strong></div>
@@ -95,7 +89,6 @@
       </div>
     </div>
 
-    <!-- History -->
     <div class="panel" style="margin-top:16px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span>⭐</span><strong>History</strong></div>
       <div id="empty" class="muted">No entries yet. Log your first day above.</div>
@@ -111,7 +104,6 @@
   </div>
 
   <script>
-    //  Helpers 
     const STORAGE_KEY = 'unlockfitness_sleep_hours_html_v1';
     const HOURS_OPTIONS = [
       { label: '<5 h 😫', value: 4.5 },
@@ -147,7 +139,6 @@
       return streak;
     }
 
-    //  UI State 
     const dateInput = $('date');
     const hourButtons = $('hourButtons');
     const saveBtn = $('save');
@@ -163,11 +154,8 @@
 
     let entries = load();
     let form = { date: todayISO(), hours: HOURS_OPTIONS[3].value };
-
-    // Init controls
     dateInput.value = form.date;
 
-    // Build hour buttons
     function renderHourButtons(){
       hourButtons.innerHTML = '';
       HOURS_OPTIONS.forEach((opt,i)=>{
@@ -185,7 +173,6 @@
 
     renderHourButtons();
 
-    // Events
     dateInput.addEventListener('change', (e)=>{ form.date = e.target.value; updateFeedback(); renderChartAndStats(); });
 
     saveBtn.addEventListener('click', ()=>{
@@ -203,7 +190,6 @@
       }
     });
 
-    // Feedback vs yesterday
     function updateFeedback(){
       const y = new Date(form.date); y.setDate(y.getDate()-1); const key = ymd(y);
       const yesterday = entries.find(e=>e.date===key);
@@ -214,7 +200,6 @@
       else feedbackEl.textContent = 'About the same as yesterday. Keep it steady!';
     }
 
-    // Table
     function renderTable(){
       if(entries.length===0){ emptyEl.style.display='block'; tableEl.style.display='none'; return; }
       emptyEl.style.display='none'; tableEl.style.display='table';
@@ -231,9 +216,7 @@
       });
     }
 
-    // Chart (SVG, 0–10 hours)
     function renderChartAndStats(){
-      // build last7 array
       const byDate = new Map(entries.map(e=>[e.date,e]));
       const base = new Date(form.date);
       const last7=[];
@@ -243,7 +226,6 @@
         last7.push({ label:key.slice(5), hours: found ? found.hours : 0 });
       }
 
-      // stats
       const hoursAll = entries.map(e=>e.hours);
       const mean = +(avg(hoursAll).toFixed(1));
       const sd = +(stddev(hoursAll).toFixed(1));
@@ -252,7 +234,6 @@
       sdEl.textContent = (isNaN(sd)?0:sd) + ' h sd';
       streakEl.textContent = (isNaN(streak)?0:streak) + 'd';
 
-      // draw SVG bars
       const W=600, H=260, padL=40, padR=10, padB=28, padT=10;
       const chartW=W-padL-padR, chartH=H-padT-padB;
       const maxH=10; // hours axis
@@ -262,37 +243,32 @@
       const yScale = (h)=> chartH - (h/maxH)*chartH;
 
       let svg = '';
-      // axes
       svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/>`;
-      // horizontal grid lines + labels (0,2,4,6,8,10)
       for(let v=0; v<=10; v+=2){
         const y = padT + yScale(v);
         svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#232333" stroke-width="1"/>`;
         svg += `<text x="${padL-8}" y="${y+4}" font-size="11" fill="#8a8aa0" text-anchor="end">${v}</text>`;
       }
-      // 8h reference
       const y8 = padT + yScale(8);
       svg += `<line x1="${padL}" y1="${y8}" x2="${W-padR}" y2="${y8}" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 3"/>`;
 
-      // bars
       last7.forEach((d,i)=>{
         const x = padL + i*(barW+gap) + gap/2;
         const h = (d.hours/maxH)*chartH;
         const y = padT + (chartH - h);
         svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="8" fill="#6d7cff"/>`;
-        // label
         svg += `<text x="${x+barW/2}" y="${H-8}" font-size="11" fill="#8a8aa0" text-anchor="middle">${d.label}</text>`;
       });
 
       chartEl.innerHTML = svg;
     }
 
-    // Initial render
     renderTable();
     renderChartAndStats();
     updateFeedback();
   </script>
 </body>
 </html>
+
 
 
