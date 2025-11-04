@@ -69,7 +69,7 @@
 
         <label style="margin-top:10px">How many hours did you sleep?</label>
         <div id="hourButtons" class="hours" role="radiogroup" aria-label="Hours slept">
-          <!-- buttons inserted by JS -->
+          <!-- buttons-->
         </div>
 
         <div class="actions">
@@ -111,7 +111,7 @@
   </div>
 
   <script>
-    // ====== Helpers ======
+    //  Helpers 
     const STORAGE_KEY = 'unlockfitness_sleep_hours_html_v1';
     const HOURS_OPTIONS = [
       { label: '<5 h 😫', value: 4.5 },
@@ -147,7 +147,7 @@
       return streak;
     }
 
-    // ====== UI State ======
+    //  UI State 
     const dateInput = $('date');
     const hourButtons = $('hourButtons');
     const saveBtn = $('save');
