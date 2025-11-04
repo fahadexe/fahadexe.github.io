@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UnlockFitness · Sleep Tracker</title>
+  <style>
+    :root{
+      --bg:#0b0b0f;--panel:#121218;--muted:#8a8aa0;--line:#232333;--text:#e8e8f0;--accent:#6d7cff;--accent-2:#22c55e;--danger:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial; background:var(--bg); color:var(--text)}
+    .wrap{max-width:980px;margin:0 auto;padding:24px}
+    .header{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+    .badge{background:#0f0f15;border:1px solid var(--line);padding:10px;border-radius:14px}
+    h1{margin:0;font-weight:700;font-size: clamp(20px,2.4vw,28px)}
+    .muted{color:var(--muted);font-size:14px}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:900px){.grid{grid-template-columns: 1fr 2fr}}
+
+    /* form */
+    label{display:block;margin-bottom:6px;color:#cfd0e3;font-size:14px}
+    input[type="date"]{background:#0b0b10;border:1px solid var(--line);color:var(--text);padding:10px 12px;border-radius:12px;width:100%;outline:none}
+    input[type="date"]:focus{border-color:var(--accent)}
+
+    .hours{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+    .btn{border:1px solid var(--line);background:#0d0d14;color:var(--text);padding:12px 10px;border-radius:12px;cursor:pointer;transition:transform .05s ease, border-color .2s}
+    .btn:hover{border-color:#3a3a59}
+    .btn.active{outline:2px solid var(--accent); border-color:transparent}
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .primary{background:var(--accent);border:0;color:white;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600}
+    .ghost{background:#12121a;border:1px solid var(--line);color:#d7d7e6;padding:10px 14px;border-radius:12px;cursor:pointer}
+
+    .feedback{color:#9ae6b4;font-size:14px;margin-top:6px;min-height:18px}
+
+    /* chart */
+    .chart-wrap{height:280px}
+    svg{width:100%;height:100%}
+    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    .card{background:#0b0b12;border:1px solid var(--line);border-radius:12px;padding:12px}
+    .card .title{color:var(--muted);font-size:12px}
+    .card .val{font-weight:700;font-size:20px}
+
+    /* table */
+    table{width:100%;border-collapse:collapse}
+    thead th{color:var(--muted);text-align:left;font-weight:600;border-bottom:1px solid var(--line);padding:10px}
+    tbody td{border-bottom:1px solid #171722;padding:10px}
+    .del{background:#16161f;border:1px solid var(--line);color:#e8a0a0;padding:6px 10px;border-radius:10px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="badge">🛏️</div>
+      <div>
+        <h1>UnlockFitness · Sleep Tracker</h1>
+        <div class="muted">Tap how many hours you slept. No typing.</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: input panel -->
+      <div class="panel">
+        <label for="date">Date</label>
+        <input id="date" type="date" />
+
+        <label style="margin-top:10px">How many hours did you sleep?</label>
+        <div id="hourButtons" class="hours" role="radiogroup" aria-label="Hours slept">
+          <!-- buttons inserted by JS -->
+        </div>
+
+        <div class="actions">
+          <button id="save" class="primary">Save Entry</button>
+          <button id="clearAll" class="ghost">Clear All</button>
+        </div>
+        <div id="feedback" class="feedback"></div>
+      </div>
+
+      <!-- RIGHT: chart + stats -->
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:8px"><span>🌙</span><strong>Last 7 days</strong></div>
+          <div class="muted">Target: 8h</div>
+        </div>
+        <div class="chart-wrap"><svg id="chart" viewBox="0 0 600 260" preserveAspectRatio="none" aria-label="Sleep hours chart"></svg></div>
+
+        <div class="stat-grid">
+          <div class="card"><div class="title">Avg sleep</div><div id="avg" class="val">0 h</div></div>
+          <div class="card"><div class="title">Consistency</div><div id="sd" class="val">0 h sd</div></div>
+          <div class="card"><div class="title">Streak</div><div id="streak" class="val">0d</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="panel" style="margin-top:16px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span>⭐</span><strong>History</strong></div>
+      <div id="empty" class="muted">No entries yet. Log your first day above.</div>
+      <div class="table-wrap" style="overflow-x:auto">
+        <table id="table" style="display:none">
+          <thead>
+            <tr><th>Date</th><th>Hours Slept</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== Helpers ======
+    const STORAGE_KEY = 'unlockfitness_sleep_hours_html_v1';
+    const HOURS_OPTIONS = [
+      { label: '<5 h 😫', value: 4.5 },
+      { label: '5–6 h 🙁', value: 5.5 },
+      { label: '6–7 h 🙂', value: 6.5 },
+      { label: '7–8 h 😊', value: 7.5 },
+      { label: '8–9 h 😴', value: 8.5 },
+      { label: '>9 h 💤', value: 9.5 },
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const todayISO = () => { const d = new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); };
+    const ymd = (d) => { d = new Date(d); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); };
+    const avg = (a) => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
+    const stddev = (a) => { if(a.length<=1) return 0; const m=avg(a); return Math.sqrt(avg(a.map(x=>(x-m)**2))); };
+
+    function load(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[] } catch{ return [] } }
+    function save(data){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch{} }
+
+    function upsert(entries, entry){
+      const others = entries.filter(e=>e.date !== entry.date);
+      return [...others, entry].sort((a,b)=> a.date < b.date ? -1 : 1);
+    }
+
+    function computeStreak(sorted){
+      if(!sorted.length) return 0;
+      let streak=1;
+      for(let i=sorted.length-1;i>0;i--){
+        const d1=new Date(sorted[i].date), d0=new Date(sorted[i-1].date);
+        const diff = Math.round((d1-d0)/(1000*60*60*24));
+        if(diff===1) streak++; else if(diff>1) break;
+      }
+      return streak;
+    }
+
+    // ====== UI State ======
+    const dateInput = $('date');
+    const hourButtons = $('hourButtons');
+    const saveBtn = $('save');
+    const clearAllBtn = $('clearAll');
+    const tbody = $('tbody');
+    const tableEl = $('table');
+    const emptyEl = $('empty');
+    const feedbackEl = $('feedback');
+    const avgEl = $('avg');
+    const sdEl = $('sd');
+    const streakEl = $('streak');
+    const chartEl = $('chart');
+
+    let entries = load();
+    let form = { date: todayISO(), hours: HOURS_OPTIONS[3].value };
+
+    // Init controls
+    dateInput.value = form.date;
+
+    // Build hour buttons
+    function renderHourButtons(){
+      hourButtons.innerHTML = '';
+      HOURS_OPTIONS.forEach((opt,i)=>{
+        const b = document.createElement('button');
+        b.type='button'; b.className='btn'+(form.hours===opt.value?' active':'');
+        b.textContent = opt.label;
+        b.setAttribute('role','radio');
+        b.setAttribute('aria-checked', form.hours===opt.value ? 'true':'false');
+        b.addEventListener('click',()=>{
+          form.hours = opt.value; renderHourButtons();
+        });
+        hourButtons.appendChild(b);
+      });
+    }
+
+    renderHourButtons();
+
+    // Events
+    dateInput.addEventListener('change', (e)=>{ form.date = e.target.value; updateFeedback(); renderChartAndStats(); });
+
+    saveBtn.addEventListener('click', ()=>{
+      const entry = { id: crypto.randomUUID(), date: form.date, hours: Number(form.hours) };
+      entries = upsert(entries, entry);
+      save(entries);
+      renderTable();
+      renderChartAndStats();
+      updateFeedback();
+    });
+
+    clearAllBtn.addEventListener('click', ()=>{
+      if(confirm('Delete all sleep entries?')){
+        entries = []; save(entries); renderTable(); renderChartAndStats(); updateFeedback();
+      }
+    });
+
+    // Feedback vs yesterday
+    function updateFeedback(){
+      const y = new Date(form.date); y.setDate(y.getDate()-1); const key = ymd(y);
+      const yesterday = entries.find(e=>e.date===key);
+      if(!yesterday){ feedbackEl.textContent = 'Log yesterday to get feedback!'; return; }
+      const diff = form.hours - yesterday.hours;
+      if(diff > 0.5) feedbackEl.textContent = 'You slept longer than yesterday!';
+      else if(diff < -0.5) feedbackEl.textContent = 'You slept less than yesterday. Aim for 7–9 hours.';
+      else feedbackEl.textContent = 'About the same as yesterday. Keep it steady!';
+    }
+
+    // Table
+    function renderTable(){
+      if(entries.length===0){ emptyEl.style.display='block'; tableEl.style.display='none'; return; }
+      emptyEl.style.display='none'; tableEl.style.display='table';
+      tbody.innerHTML='';
+      entries.forEach(e=>{
+        const tr=document.createElement('tr');
+        const tdDate=document.createElement('td'); tdDate.textContent=e.date; tr.appendChild(tdDate);
+        const tdHours=document.createElement('td'); tdHours.textContent=e.hours+' h'; tr.appendChild(tdHours);
+        const tdAct=document.createElement('td');
+        const del=document.createElement('button'); del.textContent='Delete'; del.className='del';
+        del.addEventListener('click',()=>{ entries = entries.filter(x=>x.id!==e.id); save(entries); renderTable(); renderChartAndStats(); updateFeedback(); });
+        tdAct.appendChild(del); tr.appendChild(tdAct);
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Chart (SVG, 0–10 hours)
+    function renderChartAndStats(){
+      // build last7 array
+      const byDate = new Map(entries.map(e=>[e.date,e]));
+      const base = new Date(form.date);
+      const last7=[];
+      for(let i=6;i>=0;i--){
+        const d=new Date(base); d.setDate(base.getDate()-i);
+        const key=ymd(d); const found=byDate.get(key);
+        last7.push({ label:key.slice(5), hours: found ? found.hours : 0 });
+      }
+
+      // stats
+      const hoursAll = entries.map(e=>e.hours);
+      const mean = +(avg(hoursAll).toFixed(1));
+      const sd = +(stddev(hoursAll).toFixed(1));
+      const streak = computeStreak(entries);
+      avgEl.textContent = (isNaN(mean)?0:mean) + ' h';
+      sdEl.textContent = (isNaN(sd)?0:sd) + ' h sd';
+      streakEl.textContent = (isNaN(streak)?0:streak) + 'd';
+
+      // draw SVG bars
+      const W=600, H=260, padL=40, padR=10, padB=28, padT=10;
+      const chartW=W-padL-padR, chartH=H-padT-padB;
+      const maxH=10; // hours axis
+      const barW = chartW / last7.length * 0.6;
+      const gap = (chartW / last7.length) * 0.4;
+
+      const yScale = (h)=> chartH - (h/maxH)*chartH;
+
+      let svg = '';
+      // axes
+      svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="transparent"/>`;
+      // horizontal grid lines + labels (0,2,4,6,8,10)
+      for(let v=0; v<=10; v+=2){
+        const y = padT + yScale(v);
+        svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#232333" stroke-width="1"/>`;
+        svg += `<text x="${padL-8}" y="${y+4}" font-size="11" fill="#8a8aa0" text-anchor="end">${v}</text>`;
+      }
+      // 8h reference
+      const y8 = padT + yScale(8);
+      svg += `<line x1="${padL}" y1="${y8}" x2="${W-padR}" y2="${y8}" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 3"/>`;
+
+      // bars
+      last7.forEach((d,i)=>{
+        const x = padL + i*(barW+gap) + gap/2;
+        const h = (d.hours/maxH)*chartH;
+        const y = padT + (chartH - h);
+        svg += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="8" fill="#6d7cff"/>`;
+        // label
+        svg += `<text x="${x+barW/2}" y="${H-8}" font-size="11" fill="#8a8aa0" text-anchor="middle">${d.label}</text>`;
+      });
+
+      chartEl.innerHTML = svg;
+    }
+
+    // Initial render
+    renderTable();
+    renderChartAndStats();
+    updateFeedback();
+  </script>
+</body>
+</html>
